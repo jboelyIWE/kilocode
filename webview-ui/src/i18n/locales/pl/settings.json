@@ -44,6 +44,7 @@
 		"selectProviderPlaceholder": "Wybierz dostawcę",
 		"openaiProvider": "OpenAI",
 		"ollamaProvider": "Ollama",
+		"geminiProvider": "Google Gemini",
 		"openaiCompatibleProvider": "Kompatybilny z OpenAI",
 		"openaiCompatibleBaseUrlLabel": "Bazowy URL:",
 		"openaiCompatibleApiKeyLabel": "Klucz API:",

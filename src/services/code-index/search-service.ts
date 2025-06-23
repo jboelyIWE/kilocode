@@ -26,23 +26,26 @@ export class CodeIndexSearchService {
 	 */
 	public async searchIndex(query: string, directoryPrefix?: string): Promise<VectorStoreSearchResult[]> {
 		if (!this.configManager.isFeatureEnabled || !this.configManager.isFeatureConfigured) {
+			console.warn("[CodeIndexSearchService] Code index feature is disabled or not configured.")
 			throw new Error("Code index feature is disabled or not configured.")
 		}
 
 		const minScore = this.configManager.currentSearchMinScore
 
-		const currentState = this.stateManager.getCurrentStatus().systemStatus
+		/*const currentState = this.stateManager.getCurrentStatus().systemStatus
 		if (currentState !== "Indexed" && currentState !== "Indexing") {
 			// Allow search during Indexing too
 			throw new Error(`Code index is not ready for search. Current state: ${currentState}`)
 		}
-
+		*/
 		try {
 			// Generate embedding for query
 			const embeddingResponse = await this.embedder.createEmbeddings([query])
+			console.log("[CodeIndexSearchService] Generated embedding :", embeddingResponse?.embeddings[0])
 			const vector = embeddingResponse?.embeddings[0]
 			if (!vector) {
-				throw new Error("Failed to generate embedding for query.")
+				console.error("[CodeIndexSearchService] Failed to generate vector for query:", query)
+				throw new Error("Failed to generate vector for query.")
 			}
 
 			// Handle directory prefix
@@ -50,9 +53,11 @@ export class CodeIndexSearchService {
 			if (directoryPrefix) {
 				normalizedPrefix = path.normalize(directoryPrefix)
 			}
+			console.log("[CodeIndexSearchService] Normalized directory prefix:", normalizedPrefix)
 
 			// Perform search
 			const results = await this.vectorStore.search(vector, normalizedPrefix, minScore)
+
 			return results
 		} catch (error) {
 			console.error("[CodeIndexSearchService] Error during search:", error)

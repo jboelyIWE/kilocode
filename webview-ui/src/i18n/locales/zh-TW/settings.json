@@ -44,6 +44,7 @@
 		"selectProviderPlaceholder": "選擇提供者",
 		"openaiProvider": "OpenAI",
 		"ollamaProvider": "Ollama",
+		"geminiProvider": "Google Gemini",
 		"openaiCompatibleProvider": "OpenAI 相容",
 		"openaiCompatibleBaseUrlLabel": "基礎 URL：",
 		"openaiCompatibleApiKeyLabel": "API 金鑰：",

@@ -5,9 +5,12 @@ packages:
   - packages/*
 
 onlyBuiltDependencies:
+  - '@swc/core'
   - '@tailwindcss/oxide'
   - '@vscode/vsce-sign'
+  - better-sqlite3
   - core-js
   - esbuild
   - keytar
   - puppeteer-chromium-resolver
+  - sharp

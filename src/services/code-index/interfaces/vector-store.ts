@@ -64,9 +64,12 @@ export interface VectorStoreSearchResult {
 }
 
 export interface Payload {
-	filePath: string
-	codeChunk: string
-	startLine: number
-	endLine: number
-	[key: string]: any
+	metadata: {
+		filePath: string
+		codeChunk: string
+		startLine: number
+		endLine: number
+		[key: string]: any // Allow other properties within metadata
+	}
+	[key: string]: any // Allow other top-level properties in payload
 }

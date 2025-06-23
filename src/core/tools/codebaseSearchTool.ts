@@ -66,26 +66,37 @@ export async function codebaseSearchTool(
 	try {
 		const context = cline.providerRef.deref()?.context
 		if (!context) {
+			console.log("Extension context is not available.")
 			throw new Error("Extension context is not available.")
 		}
 
 		const manager = CodeIndexManager.getInstance(context)
 
 		if (!manager) {
+			console.log("CodeIndexManager is not available.")
 			throw new Error("CodeIndexManager is not available.")
 		}
 
 		if (!manager.isFeatureEnabled) {
+			console.log("Code Indexing is disabled in the settings.")
 			throw new Error("Code Indexing is disabled in the settings.")
 		}
 		if (!manager.isFeatureConfigured) {
+			console.log("Code Indexing is not configured (Missing OpenAI Key or Qdrant URL).")
 			throw new Error("Code Indexing is not configured (Missing OpenAI Key or Qdrant URL).")
 		}
 
 		const searchResults: VectorStoreSearchResult[] = await manager.searchIndex(query, directoryPrefix)
+		console.log(`Search results for query "${query}":`, searchResults)
 
 		// 3. Format and push results
+		if (searchResults && searchResults.length === 0) {
+			console.log(`No relevant code snippets found for the query: "${query}" Search Result "${searchResults}"`)
+			pushToolResult(`No relevant code snippets found for the query: "${query}" Search Result "${searchResults}"`)
+			return
+		}
 		if (!searchResults || searchResults.length === 0) {
+			console.log(`No relevant code snippets found for the query: "${query}"`)
 			pushToolResult(`No relevant code snippets found for the query: "${query}"`) // Use simple string for no results
 			return
 		}
@@ -105,17 +116,16 @@ export async function codebaseSearchTool(
 		}
 
 		searchResults.forEach((result) => {
-			if (!result.payload) return
-			if (!("filePath" in result.payload)) return
+			if (!result.payload?.metadata) return // Check for metadata existence
 
-			const relativePath = vscode.workspace.asRelativePath(result.payload.filePath, false)
+			const relativePath = vscode.workspace.asRelativePath(result.payload.metadata.filePath, false)
 
 			jsonResult.results.push({
 				filePath: relativePath,
 				score: result.score,
-				startLine: result.payload.startLine,
-				endLine: result.payload.endLine,
-				codeChunk: result.payload.codeChunk.trim(),
+				startLine: result.payload.metadata.startLine,
+				endLine: result.payload.metadata.endLine,
+				codeChunk: result.payload.metadata.codeChunk.trim(),
 			})
 		})
 

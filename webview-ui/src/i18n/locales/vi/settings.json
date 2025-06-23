@@ -44,6 +44,7 @@
 		"selectProviderPlaceholder": "Chọn nhà cung cấp",
 		"openaiProvider": "OpenAI",
 		"ollamaProvider": "Ollama",
+		"geminiProvider": "Google Gemini",
 		"openaiCompatibleProvider": "Tương thích OpenAI",
 		"openaiCompatibleBaseUrlLabel": "URL cơ sở:",
 		"openaiCompatibleApiKeyLabel": "Khóa API:",

@@ -1,5 +1,6 @@
 import * as vscode from "vscode"
 import { OpenAiEmbedder } from "./embedders/openai"
+import { GeminiEmbedder } from "./embedders/gemini"
 import { CodeIndexOllamaEmbedder } from "./embedders/ollama"
 import { OpenAICompatibleEmbedder } from "./embedders/openai-compatible"
 import { EmbedderProvider, getDefaultModelId, getModelDimension } from "../../shared/embeddingModels"
@@ -53,6 +54,14 @@ export class CodeIndexServiceFactory {
 				config.openAiCompatibleOptions.apiKey,
 				config.modelId,
 			)
+		} else if (provider === "gemini") {
+			if (!config.geminiOptions?.geminiApiKey) {
+				throw new Error("Gemini configuration missing for embedder creation")
+			}
+			return new GeminiEmbedder({
+				...config.geminiOptions,
+				geminiEmbeddingModelId: config.modelId,
+			})
 		}
 
 		throw new Error(`Invalid embedder type configured: ${config.embedderProvider}`)
@@ -89,6 +98,7 @@ export class CodeIndexServiceFactory {
 			} else {
 				errorMessage += `Check model profiles or configuration.`
 			}
+			console.error(errorMessage)
 			throw new Error(errorMessage)
 		}
 

@@ -241,11 +241,19 @@ export class CodeIndexManager {
 	}
 
 	public async searchIndex(query: string, directoryPrefix?: string): Promise<VectorStoreSearchResult[]> {
-		if (!this.isFeatureEnabled) {
+		try {
+			if (!this.isFeatureEnabled) {
+				console.error("[CodeIndexManager] Code Indexing feature is disabled.")
+				throw new Error("Code Indexing feature is disabled.")
+			}
+			this.assertInitialized()
+			console.log("[CodeIndexManager] Searching index with query:", query)
+			return this._searchService!.searchIndex(query, directoryPrefix)
+		} catch (error) {
+			console.error("[CodeIndexManager] Error during search:", error)
+			this._stateManager.setSystemState("Error", `Search failed: ${(error as Error).message}`)
 			return []
 		}
-		this.assertInitialized()
-		return this._searchService!.searchIndex(query, directoryPrefix)
 	}
 
 	/**

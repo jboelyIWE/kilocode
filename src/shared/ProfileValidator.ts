@@ -61,6 +61,7 @@ export class ProfileValidator {
 			case "bedrock":
 			case "vertex":
 			case "gemini":
+				return profile.geminiModelId
 			case "mistral":
 			case "deepseek":
 			case "xai":

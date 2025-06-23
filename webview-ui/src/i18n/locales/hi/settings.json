@@ -44,6 +44,7 @@
 		"selectProviderPlaceholder": "प्रदाता चुनें",
 		"openaiProvider": "OpenAI",
 		"ollamaProvider": "Ollama",
+		"geminiProvider": "Google Gemini",
 		"openaiCompatibleProvider": "OpenAI संगत",
 		"openaiCompatibleBaseUrlLabel": "आधार URL:",
 		"openaiCompatibleApiKeyLabel": "API कुंजी:",

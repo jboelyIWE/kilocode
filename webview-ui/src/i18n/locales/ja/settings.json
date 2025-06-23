@@ -44,6 +44,7 @@
 		"selectProviderPlaceholder": "プロバイダーを選択",
 		"openaiProvider": "OpenAI",
 		"ollamaProvider": "Ollama",
+		"geminiProvider": "Google Gemini",
 		"openaiCompatibleProvider": "OpenAI互換",
 		"openaiCompatibleBaseUrlLabel": "ベースURL：",
 		"openaiCompatibleApiKeyLabel": "APIキー：",

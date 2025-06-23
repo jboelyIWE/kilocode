@@ -44,6 +44,7 @@
 		"selectProviderPlaceholder": "Pilih provider",
 		"openaiProvider": "OpenAI",
 		"ollamaProvider": "Ollama",
+		"geminiProvider": "Google Gemini",
 		"openaiCompatibleProvider": "OpenAI Compatible",
 		"openaiKeyLabel": "OpenAI Key:",
 		"openaiCompatibleBaseUrlLabel": "Base URL:",

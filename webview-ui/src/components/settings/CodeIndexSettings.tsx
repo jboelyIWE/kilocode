@@ -71,7 +71,11 @@ export const CodeIndexSettings: React.FC<CodeIndexSettingsProps> = ({
 	// Safely calculate available models for current provider
 	const currentProvider = codebaseIndexConfig?.codebaseIndexEmbedderProvider
 	const modelsForProvider =
-		currentProvider === "openai" || currentProvider === "ollama" || currentProvider === "openai-compatible"
+		//if currentProvider in the  codebaseIndexModelsSchema keys
+		// then use that provider's models, otherwise default to openai models
+		currentProvider &&
+		codebaseIndexModels &&
+		Object.prototype.hasOwnProperty.call(codebaseIndexModels, currentProvider)
 			? codebaseIndexModels?.[currentProvider] || codebaseIndexModels?.openai
 			: codebaseIndexModels?.openai
 	const availableModelIds = Object.keys(modelsForProvider || {})
@@ -144,6 +148,10 @@ export const CodeIndexSettings: React.FC<CodeIndexSettingsProps> = ({
 				codebaseIndexEmbedderProvider: z.literal("ollama"),
 				codebaseIndexEmbedderBaseUrl: z.string().url("Ollama URL must be a valid URL"),
 			}),
+			gemini: baseSchema.extend({
+				codebaseIndexEmbedderProvider: z.literal("gemini"),
+				codebaseIndexGeminiApiKey: z.string().min(1, "Gemini API key is required"),
+			}),
 			"openai-compatible": baseSchema.extend({
 				codebaseIndexEmbedderProvider: z.literal("openai-compatible"),
 				codebaseIndexOpenAiCompatibleBaseUrl: z.string().url("Base URL must be a valid URL"),
@@ -162,7 +170,9 @@ export const CodeIndexSettings: React.FC<CodeIndexSettingsProps> = ({
 					? providerSchemas.openai
 					: config.codebaseIndexEmbedderProvider === "ollama"
 						? providerSchemas.ollama
-						: providerSchemas["openai-compatible"]
+						: config.codebaseIndexEmbedderProvider === "gemini"
+							? providerSchemas.gemini
+							: providerSchemas["openai-compatible"]
 
 			schema.parse({
 				...config,
@@ -281,6 +291,7 @@ export const CodeIndexSettings: React.FC<CodeIndexSettingsProps> = ({
 								<SelectContent>
 									<SelectItem value="openai">{t("settings:codeIndex.openaiProvider")}</SelectItem>
 									<SelectItem value="ollama">{t("settings:codeIndex.ollamaProvider")}</SelectItem>
+									<SelectItem value="gemini">{t("settings:codeIndex.geminiProvider")}</SelectItem>
 									<SelectItem value="openai-compatible">
 										{t("settings:codeIndex.openaiCompatibleProvider")}
 									</SelectItem>
@@ -299,6 +310,23 @@ export const CodeIndexSettings: React.FC<CodeIndexSettingsProps> = ({
 									type="password"
 									value={apiConfiguration.codeIndexOpenAiKey || ""}
 									onInput={(e: any) => setApiConfigurationField("codeIndexOpenAiKey", e.target.value)}
+									style={{ width: "100%" }}></VSCodeTextField>
+							</div>
+						</div>
+					)}
+
+					{codebaseIndexConfig?.codebaseIndexEmbedderProvider === "gemini" && (
+						<div className="flex flex-col gap-3">
+							<div className="flex items-center gap-4 font-bold">
+								<div>{t("settings:codeIndex.geminiApiKeyLabel")}</div>
+							</div>
+							<div>
+								<VSCodeTextField
+									type="password"
+									value={apiConfiguration.codebaseIndexGeminiApiKey || ""}
+									onInput={(e: any) =>
+										setApiConfigurationField("codebaseIndexGeminiApiKey", e.target.value)
+									}
 									style={{ width: "100%" }}></VSCodeTextField>
 							</div>
 						</div>

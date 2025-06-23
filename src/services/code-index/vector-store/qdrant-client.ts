@@ -4,7 +4,7 @@ import * as path from "path"
 import { getWorkspacePath } from "../../../utils/path"
 import { IVectorStore } from "../interfaces/vector-store"
 import { Payload, VectorStoreSearchResult } from "../interfaces"
-import { MAX_SEARCH_RESULTS, SEARCH_MIN_SCORE } from "../constants"
+import { MAX_SEARCH_RESULTS, SEARCH_MIN_SCORE, COLLECTION_NAME } from "../constants"
 
 /**
  * Qdrant implementation of the vector store interface
@@ -34,7 +34,7 @@ export class QdrantVectorStore implements IVectorStore {
 		// Generate collection name from workspace path
 		const hash = createHash("sha256").update(workspacePath).digest("hex")
 		this.vectorSize = vectorSize
-		this.collectionName = `ws-${hash.substring(0, 16)}`
+		this.collectionName = COLLECTION_NAME //`ws-${hash.substring(0, 16)}`
 	}
 
 	private async getCollectionInfo(): Promise<Schemas["CollectionInfo"] | null> {
@@ -131,8 +131,8 @@ export class QdrantVectorStore implements IVectorStore {
 	): Promise<void> {
 		try {
 			const processedPoints = points.map((point) => {
-				if (point.payload?.filePath) {
-					const segments = point.payload.filePath.split(path.sep).filter(Boolean)
+				if (point.payload?.metadata.filePath) {
+					const segments = point.payload.metadata.filePath.split(path.sep).filter(Boolean)
 					const pathSegments = segments.reduce(
 						(acc: Record<string, string>, segment: string, index: number) => {
 							acc[index.toString()] = segment
@@ -143,7 +143,7 @@ export class QdrantVectorStore implements IVectorStore {
 					return {
 						...point,
 						payload: {
-							...point.payload,
+							...point.payload.metadata,
 							pathSegments,
 						},
 					}
@@ -189,7 +189,7 @@ export class QdrantVectorStore implements IVectorStore {
 		try {
 			let filter = undefined
 
-			if (directoryPrefix) {
+			/*if (directoryPrefix) {
 				const segments = directoryPrefix.split(path.sep).filter(Boolean)
 
 				filter = {
@@ -198,7 +198,7 @@ export class QdrantVectorStore implements IVectorStore {
 						match: { value: segment },
 					})),
 				}
-			}
+			}*/
 
 			const searchRequest = {
 				query: queryVector,
@@ -206,20 +206,27 @@ export class QdrantVectorStore implements IVectorStore {
 				score_threshold: SEARCH_MIN_SCORE,
 				limit: MAX_SEARCH_RESULTS,
 				params: {
-					hnsw_ef: 128,
-					exact: false,
+					//hnsw_ef: 128,
+					exact: true,
 				},
-				with_payload: {
-					include: ["filePath", "codeChunk", "startLine", "endLine", "pathSegments"],
-				},
+				with_payload: true, //{include: ["metadata"]} // Include all payload data
 			}
 
 			if (minScore !== undefined) {
 				searchRequest.score_threshold = minScore
 			}
 
+			const count = await this.client.count(this.collectionName)
+			console.log("Document count:", count)
+
+			const testResult = await this.client.query(this.collectionName, {
+				query: queryVector,
+				limit: 5,
+				with_payload: true,
+			})
 			const operationResult = await this.client.query(this.collectionName, searchRequest)
-			const filteredPoints = operationResult.points.filter((p) => this.isPayloadValid(p.payload))
+
+			const filteredPoints = operationResult.points.filter((p) => this.isPayloadValid(p.payload.metadata))
 
 			return filteredPoints as VectorStoreSearchResult[]
 		} catch (error) {
