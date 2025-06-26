@@ -1,0 +1,63 @@
+{
+	"answers": {
+		"yes": "Ναι",
+		"no": "Όχι",
+		"cancel": "Ακύρωση",
+		"remove": "Αφαίρεση",
+		"keep": "Διατήρηση"
+	},
+	"number_format": {
+		"thousand_suffix": "χιλ",
+		"million_suffix": "εκατ",
+		"billion_suffix": "δισ"
+	},
+	"feedback": {
+		"title": "Σχόλια",
+		"description": "Θα θέλαμε να ακούσουμε τα σχόλιά σου ή να σε βοηθήσουμε με οποιοδήποτε πρόβλημα αντιμετωπίζεις",
+		"githubIssues": "Αναφορά προβλήματος στο GitHub",
+		"githubDiscussions": "Συμμετοχή στις συζητήσεις του GitHub",
+		"discord": "Συμμετοχή στην κοινότητά μας στο Discord",
+		"customerSupport": "Υποστήριξη πελατών"
+	},
+	"ui": {
+		"search_placeholder": "Αναζήτηση..."
+	},
+	"mermaid": {
+		"loading": "Δημιουργία διαγράμματος mermaid...",
+		"render_error": "Αδυναμία απόδοσης διαγράμματος",
+		"buttons": {
+			"zoom": "Ζουμ",
+			"zoomIn": "Μεγέθυνση",
+			"zoomOut": "Σμίκρυνση",
+			"copy": "Αντιγραφή",
+			"save": "Αποθήκευση εικόνας",
+			"viewCode": "Προβολή κώδικα",
+			"viewDiagram": "Προβολή διαγράμματος",
+			"close": "Κλείσιμο"
+		},
+		"modal": {
+			"codeTitle": "Κώδικας Mermaid"
+		},
+		"tabs": {
+			"diagram": "Διάγραμμα",
+			"code": "Κώδικας"
+		},
+		"feedback": {
+			"imageCopied": "Η εικόνα αντιγράφηκε στο πρόχειρο",
+			"copyError": "Σφάλμα κατά την αντιγραφή της εικόνας"
+		}
+	},
+	"file": {
+		"errors": {
+			"invalidDataUri": "Μη έγκυρη μορφή data URI",
+			"copyingImage": "Σφάλμα κατά την αντιγραφή της εικόνας: {{error}}",
+			"openingImage": "Σφάλμα κατά το άνοιγμα της εικόνας: {{error}}",
+			"pathNotExists": "Η διαδρομή δεν υπάρχει: {{path}}",
+			"couldNotOpen": "Αδυναμία ανοίγματος αρχείου: {{error}}",
+			"couldNotOpenGeneric": "Αδυναμία ανοίγματος αρχείου!"
+		},
+		"success": {
+			"imageDataUriCopied": "Το image data URI αντιγράφηκε στο πρόχειρο"
+		}
+	}
+}

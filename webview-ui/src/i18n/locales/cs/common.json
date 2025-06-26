@@ -1,0 +1,63 @@
+{
+	"answers": {
+		"yes": "Ano",
+		"no": "Ne",
+		"cancel": "Zrušit",
+		"remove": "Odebrat",
+		"keep": "Ponechat"
+	},
+	"number_format": {
+		"thousand_suffix": "tis",
+		"million_suffix": "mil",
+		"billion_suffix": "mld"
+	},
+	"feedback": {
+		"title": "Zpětná vazba",
+		"description": "Rádi bychom slyšeli tvou zpětnou vazbu nebo ti pomohli s jakýmikoli problémy, se kterými se potýkáš",
+		"githubIssues": "Nahlásit problém na GitHubu",
+		"githubDiscussions": "Připojit se k diskuzím na GitHubu",
+		"discord": "Připojit se k naší komunitě na Discordu",
+		"customerSupport": "Zákaznická podpora"
+	},
+	"ui": {
+		"search_placeholder": "Hledat..."
+	},
+	"mermaid": {
+		"loading": "Vytváření diagramu mermaid...",
+		"render_error": "Nepodařilo se vykreslit diagram",
+		"buttons": {
+			"zoom": "Přiblížení",
+			"zoomIn": "Přiblížit",
+			"zoomOut": "Oddálit",
+			"copy": "Kopírovat",
+			"save": "Uložit obrázek",
+			"viewCode": "Zobrazit kód",
+			"viewDiagram": "Zobrazit diagram",
+			"close": "Zavřít"
+		},
+		"modal": {
+			"codeTitle": "Kód Mermaid"
+		},
+		"tabs": {
+			"diagram": "Diagram",
+			"code": "Kód"
+		},
+		"feedback": {
+			"imageCopied": "Obrázek zkopírován do schránky",
+			"copyError": "Chyba při kopírování obrázku"
+		}
+	},
+	"file": {
+		"errors": {
+			"invalidDataUri": "Neplatný formát data URI",
+			"copyingImage": "Chyba při kopírování obrázku: {{error}}",
+			"openingImage": "Chyba při otevírání obrázku: {{error}}",
+			"pathNotExists": "Cesta neexistuje: {{path}}",
+			"couldNotOpen": "Nepodařilo se otevřít soubor: {{error}}",
+			"couldNotOpenGeneric": "Nepodařilo se otevřít soubor!"
+		},
+		"success": {
+			"imageDataUriCopied": "Image data URI zkopírováno do schránky"
+		}
+	}
+}

@@ -23,6 +23,7 @@ import {
 	Info,
 	Server, // kilocode_change
 	MessageSquare,
+	Monitor,
 	LucideIcon,
 } from "lucide-react"
 
@@ -58,6 +59,7 @@ import ApiOptions from "./ApiOptions"
 import { AutoApproveSettings } from "./AutoApproveSettings"
 import { BrowserSettings } from "./BrowserSettings"
 import { CheckpointSettings } from "./CheckpointSettings"
+import { DisplaySettings } from "./DisplaySettings" // kilocode_change
 import { NotificationSettings } from "./NotificationSettings"
 import { ContextManagementSettings } from "./ContextManagementSettings"
 import { TerminalSettings } from "./TerminalSettings"
@@ -85,6 +87,7 @@ const sectionNames = [
 	"autoApprove",
 	"browser",
 	"checkpoints",
+	"display", // kilocode_change
 	"notifications",
 	"contextManagement",
 	"terminal",
@@ -146,6 +149,7 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 		alwaysAllowSubtasks,
 		alwaysAllowWrite,
 		alwaysAllowWriteOutsideWorkspace,
+		alwaysAllowWriteProtected,
 		alwaysApproveResubmit,
 		autoCondenseContext,
 		autoCondenseContextPercent,
@@ -179,6 +183,7 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 		remoteBrowserEnabled,
 		maxReadFileLine,
 		showAutoApproveMenu, // kilocode_change
+		showTaskTimeline, // kilocode_change
 		terminalCompressProgressBar,
 		maxConcurrentFileReads,
 		condensingApiConfigId,
@@ -186,6 +191,7 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 		codebaseIndexConfig,
 		codebaseIndexModels,
 		customSupportPrompts,
+		profileThresholds,
 	} = cachedState
 
 	const apiConfiguration = useMemo(() => cachedState.apiConfiguration ?? {}, [cachedState.apiConfiguration])
@@ -297,6 +303,7 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 			})
 			vscode.postMessage({ type: "alwaysAllowWrite", bool: alwaysAllowWrite })
 			vscode.postMessage({ type: "alwaysAllowWriteOutsideWorkspace", bool: alwaysAllowWriteOutsideWorkspace })
+			vscode.postMessage({ type: "alwaysAllowWriteProtected", bool: alwaysAllowWriteProtected })
 			vscode.postMessage({ type: "alwaysAllowExecute", bool: alwaysAllowExecute })
 			vscode.postMessage({ type: "alwaysAllowBrowser", bool: alwaysAllowBrowser })
 			vscode.postMessage({ type: "alwaysAllowMcp", bool: alwaysAllowMcp })
@@ -335,16 +342,18 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 			vscode.postMessage({ type: "showRooIgnoredFiles", bool: showRooIgnoredFiles })
 			vscode.postMessage({ type: "showAutoApproveMenu", bool: showAutoApproveMenu }) // kilocode_change
 			vscode.postMessage({ type: "maxReadFileLine", value: maxReadFileLine ?? -1 })
-			vscode.postMessage({ type: "maxConcurrentFileReads", value: cachedState.maxConcurrentFileReads ?? 15 })
+			vscode.postMessage({ type: "maxConcurrentFileReads", value: cachedState.maxConcurrentFileReads ?? 5 })
 			vscode.postMessage({ type: "currentApiConfigName", text: currentApiConfigName })
 			vscode.postMessage({ type: "updateExperimental", values: experiments })
 			vscode.postMessage({ type: "alwaysAllowModeSwitch", bool: alwaysAllowModeSwitch })
 			vscode.postMessage({ type: "alwaysAllowSubtasks", bool: alwaysAllowSubtasks })
+			vscode.postMessage({ type: "showTaskTimeline", bool: showTaskTimeline }) // kilocode_change
 			vscode.postMessage({ type: "condensingApiConfigId", text: condensingApiConfigId || "" })
 			vscode.postMessage({ type: "updateCondensingPrompt", text: customCondensingPrompt || "" })
 			vscode.postMessage({ type: "updateSupportPrompt", values: customSupportPrompts || {} })
 			vscode.postMessage({ type: "upsertApiConfiguration", text: currentApiConfigName, apiConfiguration })
 			vscode.postMessage({ type: "codebaseIndexConfig", values: codebaseIndexConfig })
+			vscode.postMessage({ type: "profileThresholds", values: profileThresholds })
 
 			// Update cachedState to match the current state to prevent isChangeDetected from being set back to true
 			setCachedState((prevState) => ({ ...prevState, ...extensionState }))
@@ -441,6 +450,7 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 			{ id: "autoApprove", icon: CheckCheck },
 			{ id: "browser", icon: SquareMousePointer },
 			{ id: "checkpoints", icon: GitBranch },
+			{ id: "display", icon: Monitor }, // kilocode_change
 			{ id: "notifications", icon: Bell },
 			{ id: "contextManagement", icon: Database },
 			{ id: "terminal", icon: SquareTerminal },
@@ -651,6 +661,7 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 							alwaysAllowReadOnlyOutsideWorkspace={alwaysAllowReadOnlyOutsideWorkspace}
 							alwaysAllowWrite={alwaysAllowWrite}
 							alwaysAllowWriteOutsideWorkspace={alwaysAllowWriteOutsideWorkspace}
+							alwaysAllowWriteProtected={alwaysAllowWriteProtected}
 							writeDelayMs={writeDelayMs}
 							alwaysAllowBrowser={alwaysAllowBrowser}
 							alwaysApproveResubmit={alwaysApproveResubmit}
@@ -684,6 +695,15 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 						/>
 					)}
 
+					{/* kilocode_change start display section */}
+					{activeTab === "display" && (
+						<DisplaySettings
+							showTaskTimeline={showTaskTimeline}
+							setCachedStateField={setCachedStateField}
+						/>
+					)}
+					{/* kilocode_change end display section */}
+
 					{/* Notifications Section */}
 					{activeTab === "notifications" && (
 						<NotificationSettings
@@ -707,6 +727,8 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 							maxWorkspaceFiles={maxWorkspaceFiles ?? 200}
 							showRooIgnoredFiles={showRooIgnoredFiles}
 							maxReadFileLine={maxReadFileLine}
+							maxConcurrentFileReads={maxConcurrentFileReads}
+							profileThresholds={profileThresholds}
 							setCachedStateField={setCachedStateField}
 						/>
 					)}
@@ -741,7 +763,6 @@ const SettingsView = forwardRef<SettingsViewRef, SettingsViewProps>(({ onDone, t
 						<ExperimentalSettings
 							setExperimentEnabled={setExperimentEnabled}
 							experiments={experiments}
-							maxConcurrentFileReads={maxConcurrentFileReads}
 							setCachedStateField={setCachedStateField}
 							codebaseIndexModels={codebaseIndexModels}
 							codebaseIndexConfig={codebaseIndexConfig}

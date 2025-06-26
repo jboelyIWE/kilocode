@@ -31,7 +31,8 @@
 		"prompts": "Indicaciones",
 		"experimental": "Experimental",
 		"language": "Idioma",
-		"about": "Acerca de Kilo Code"
+		"about": "Acerca de Kilo Code",
+		"display": "Mostrar"
 	},
 	"prompts": {
 		"description": "Configura indicaciones de soporte que se utilizan para acciones rápidas como mejorar indicaciones, explicar código y solucionar problemas. Estas indicaciones ayudan a Kilo Code a brindar mejor asistencia para tareas comunes de desarrollo."
@@ -84,6 +85,10 @@
 			"outsideWorkspace": {
 				"label": "Incluir archivos fuera del espacio de trabajo",
 				"description": "Permitir a Kilo Code crear y editar archivos fuera del espacio de trabajo actual sin requerir aprobación."
+			},
+			"protected": {
+				"label": "Incluir archivos protegidos",
+				"description": "Permitir a Kilo Code crear y editar archivos protegidos (como .kilocodeignore y archivos de configuración .kilocode/) sin requerir aprobación."
 			}
 		},
 		"browser": {
@@ -252,6 +257,10 @@
 				"learnMore": "Más información sobre el enrutamiento de proveedores"
 			}
 		},
+		"cerebras": {
+			"apiKey": "Clave API de Cerebras",
+			"getApiKey": "Obtener clave API de Cerebras"
+		},
 		"customModel": {
 			"capabilities": "Configure las capacidades y precios para su modelo personalizado compatible con OpenAI. Tenga cuidado al especificar las capacidades del modelo, ya que pueden afectar cómo funciona Kilo Code.",
 			"maxTokens": {
@@ -304,7 +313,12 @@
 			"medium": "Medio",
 			"low": "Bajo"
 		},
-		"setReasoningLevel": "Habilitar esfuerzo de razonamiento"
+		"setReasoningLevel": "Habilitar esfuerzo de razonamiento",
+		"claudeCode": {
+			"pathLabel": "Ruta de Claude Code",
+			"description": "Ruta opcional a su CLI de Claude Code. Por defecto, es 'claude' si no se establece.",
+			"placeholder": "Por defecto: claude"
+		}
 	},
 	"browser": {
 		"enable": {
@@ -371,7 +385,8 @@
 			"hint": "Vacío = usar prompt predeterminado"
 		},
 		"autoCondenseContext": {
-			"name": "Activar automáticamente la condensación inteligente de contexto"
+			"name": "Activar automáticamente la condensación inteligente de contexto",
+			"description": "Cuando está habilitado, Roo condensará automáticamente el contexto cuando se alcance el umbral. Cuando está deshabilitado, aún puedes activar manualmente la condensación de contexto."
 		},
 		"openTabs": {
 			"label": "Límite de contexto de pestañas abiertas",
@@ -394,6 +409,15 @@
 		"maxConcurrentFileReads": {
 			"label": "Límite de lecturas simultáneas",
 			"description": "Número máximo de archivos que la herramienta 'read_file' puede procesar simultáneamente. Valores más altos pueden acelerar la lectura de múltiples archivos pequeños pero aumentan el uso de memoria."
+		},
+		"condensingThreshold": {
+			"label": "Umbral de condensación de contexto",
+			"selectProfile": "Configurar umbral para perfil",
+			"defaultProfile": "Predeterminado global (todos los perfiles)",
+			"defaultDescription": "Cuando el contexto alcance este porcentaje, se condensará automáticamente para todos los perfiles a menos que tengan configuraciones personalizadas",
+			"profileDescription": "Umbral personalizado solo para este perfil (anula el predeterminado global)",
+			"inheritDescription": "Este perfil hereda el umbral predeterminado global ({{threshold}}%)",
+			"usesGlobal": "(usa global {{threshold}}%)"
 		}
 	},
 	"terminal": {
@@ -502,9 +526,13 @@
 			"name": "Habilitar lectura concurrente de archivos",
 			"description": "Cuando está habilitado, Kilo Code puede leer múltiples archivos en una sola solicitud. Cuando está deshabilitado, Kilo Code debe leer archivos uno a la vez. Deshabilitarlo puede ayudar cuando se trabaja con modelos menos capaces o cuando deseas más control sobre el acceso a archivos."
 		},
-		"DISABLE_COMPLETION_COMMAND": {
-			"name": "Desactivar la ejecución de comandos en attempt_completion",
-			"description": "Cuando está activado, la herramienta attempt_completion no ejecutará comandos. Esta es una función experimental para preparar la futura eliminación de la ejecución de comandos en la finalización de tareas."
+		"MARKETPLACE": {
+			"name": "Habilitar Marketplace",
+			"description": "Cuando está habilitado, puedes instalar MCP y modos personalizados del Marketplace."
+		},
+		"MULTI_FILE_APPLY_DIFF": {
+			"name": "Habilitar ediciones de archivos concurrentes",
+			"description": "Cuando está habilitado, Kilo Code puede editar múltiples archivos en una sola solicitud. Cuando está deshabilitado, Kilo Code debe editar archivos de uno en uno. Deshabilitar esto puede ayudar cuando trabajas con modelos menos capaces o cuando quieres más control sobre las modificaciones de archivos."
 		}
 	},
 	"promptCaching": {
@@ -611,5 +639,13 @@
 	"labels": {
 		"customArn": "ARN personalizado",
 		"useCustomArn": "Usar ARN personalizado..."
-	}
+	},
+	"display": {
+		"taskTimeline": {
+			"label": "Mostrar cronología de tareas",
+			"description": "Muestra una línea de tiempo visual de los mensajes de tareas, colorizados por tipo, permitiéndote ver rápidamente el progreso de la tarea y desplazarte hacia atrás hasta puntos específicos en el historial de la tarea."
+		}
+	},
+	"includeMaxOutputTokens": "Incluir tokens máximos de salida",
+	"includeMaxOutputTokensDescription": "Enviar parámetro de tokens máximos de salida en solicitudes API. Algunos proveedores pueden no soportar esto."
 }

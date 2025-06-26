@@ -1,9 +1,11 @@
 import type { StorybookConfig } from "@storybook/react-vite"
-import { resolve } from "path"
+import { resolve, dirname } from "path"
 import { readFileSync } from "fs"
+import { fileURLToPath } from "url"
 
 // Read and parse the webview-ui tsconfig.json to get path mappings
-const webviewTsConfigPath = resolve(__dirname, "../../../webview-ui/tsconfig.json")
+const currentDirname = dirname(fileURLToPath(import.meta.url))
+const webviewTsConfigPath = resolve(currentDirname, "../../../webview-ui/tsconfig.json")
 const webviewTsConfig = JSON.parse(readFileSync(webviewTsConfigPath, "utf-8"))
 const webviewPaths = webviewTsConfig.compilerOptions?.paths || {}
 
@@ -17,7 +19,7 @@ const createAliasesFromTsConfig = () => {
 			const cleanAlias = alias.replace(/\/\*$/, "")
 			const cleanPath = paths[0].replace(/\/\*$/, "")
 			// Resolve path relative to webview-ui directory
-			aliases[cleanAlias] = resolve(__dirname, "../../../webview-ui", cleanPath)
+			aliases[cleanAlias] = resolve(currentDirname, "../../../webview-ui", cleanPath)
 		}
 	}
 
@@ -42,9 +44,9 @@ const config: StorybookConfig = {
 			// Add automatically generated aliases from tsconfig
 			...tsConfigAliases,
 			// Mock overrides for Storybook (these override the tsconfig paths)
-			"@src/utils/clipboard": resolve(__dirname, "../src/mocks/utils"),
-			"@src/utils/highlighter": resolve(__dirname, "../src/mocks/utils"),
-			"@src/i18n/TranslationContext": resolve(__dirname, "../src/mocks/utils"),
+			"@src/utils/clipboard": resolve(currentDirname, "../src/mocks/utils"),
+			"@src/utils/highlighter": resolve(currentDirname, "../src/mocks/utils"),
+			"@src/i18n/TranslationContext": resolve(currentDirname, "../src/mocks/utils"),
 		}
 
 		// Add Tailwind CSS plugin to process the webview-ui's CSS

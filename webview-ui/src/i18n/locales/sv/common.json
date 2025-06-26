@@ -1,0 +1,63 @@
+{
+	"answers": {
+		"yes": "Ja",
+		"no": "Nej",
+		"cancel": "Avbryt",
+		"remove": "Ta bort",
+		"keep": "Behåll"
+	},
+	"number_format": {
+		"thousand_suffix": "k",
+		"million_suffix": "m",
+		"billion_suffix": "mdr"
+	},
+	"feedback": {
+		"title": "Feedback",
+		"description": "Vi vill gärna höra din feedback eller hjälpa dig med eventuella problem du stöter på",
+		"githubIssues": "Rapportera problem på GitHub",
+		"githubDiscussions": "Delta i diskussioner på GitHub",
+		"discord": "Gå med i vår Discord-community",
+		"customerSupport": "Kundsupport"
+	},
+	"ui": {
+		"search_placeholder": "Sök..."
+	},
+	"mermaid": {
+		"loading": "Skapar mermaid-diagram...",
+		"render_error": "Kunde inte rendera diagram",
+		"buttons": {
+			"zoom": "Zoom",
+			"zoomIn": "Zooma in",
+			"zoomOut": "Zooma ut",
+			"copy": "Kopiera",
+			"save": "Spara bild",
+			"viewCode": "Visa kod",
+			"viewDiagram": "Visa diagram",
+			"close": "Stäng"
+		},
+		"modal": {
+			"codeTitle": "Mermaid-kod"
+		},
+		"tabs": {
+			"diagram": "Diagram",
+			"code": "Kod"
+		},
+		"feedback": {
+			"imageCopied": "Bilden kopierad till urklipp",
+			"copyError": "Fel vid kopiering av bild"
+		}
+	},
+	"file": {
+		"errors": {
+			"invalidDataUri": "Ogiltigt data URI-format",
+			"copyingImage": "Fel vid kopiering av bild: {{error}}",
+			"openingImage": "Fel vid öppning av bild: {{error}}",
+			"pathNotExists": "Sökvägen finns inte: {{path}}",
+			"couldNotOpen": "Kunde inte öppna fil: {{error}}",
+			"couldNotOpenGeneric": "Kunde inte öppna fil!"
+		},
+		"success": {
+			"imageDataUriCopied": "Image data URI kopierat till urklipp"
+		}
+	}
+}
