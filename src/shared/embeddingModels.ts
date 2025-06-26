@@ -31,6 +31,7 @@ export const EMBEDDING_MODEL_PROFILES: EmbeddingModelProfiles = {
 	},
 	gemini: {
 		"gemini-embedding-exp-03-07": { dimension: 3072 },
+		"text-embedding-004": { dimension: 768 },
 	},
 	"openai-compatible": {
 		"text-embedding-3-small": { dimension: 1536 },
@@ -89,7 +90,7 @@ export function getDefaultModelId(provider: EmbedderProvider): string {
 			return "unknown-default" // Placeholder specific model ID
 		}
 		case "gemini":
-			return "gemini-embedding-exp-03-07"
+			return "text-embedding-004" // Default Gemini model ID
 		default:
 			// Fallback for unknown providers
 			console.warn(`Unknown provider for default model ID: ${provider}. Falling back to OpenAI default.`)
